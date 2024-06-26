@@ -1,6 +1,8 @@
 package com.example.demo.Product.queryhandlers;
 
+import com.example.demo.Exceptions.ProductNotFoundException;
 import com.example.demo.Product.Model.Product;
+import com.example.demo.Product.Model.ProductDTO;
 import com.example.demo.Product.ProductRepository;
 import com.example.demo.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,17 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class GetProductQueryHandler implements Query<Integer, Product> {
+public class GetProductQueryHandler implements Query<Integer, ProductDTO> {
     @Autowired
     ProductRepository productRepository;
     @Override
-    public ResponseEntity<Product> execute(Integer id){
+    public ResponseEntity<ProductDTO> execute(Integer id){
         Optional<Product> product= productRepository.findById(id);
         if(product.isEmpty()){
-            throw new IllegalStateException(new RuntimeException("product not found"));
+            throw new ProductNotFoundException();
         }
-        return ResponseEntity.ok(product.get());
+        ProductDTO productDTO = new ProductDTO(product.get());
+        return ResponseEntity.ok(productDTO);
     }
+
 }

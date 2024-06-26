@@ -1,6 +1,7 @@
 package com.example.demo.Product.commandhandlers;
 
 import com.example.demo.Command;
+import com.example.demo.Exceptions.ProductNotValidException;
 import com.example.demo.Product.Model.Product;
 import com.example.demo.Product.ProductRepository;
 import io.micrometer.common.util.StringUtils;
@@ -22,19 +23,19 @@ public class CreateProductCommandHandler implements Command<Product, Product> {
 
     public void validateProduct(Product product){
         if(StringUtils.isBlank(product.getName())) {
-            throw new RuntimeException("Product name cannot be empty");
+            throw new ProductNotValidException("Product name cannot be empty");
         }
 
         if(StringUtils.isBlank(product.getDescription())) {
-            throw new RuntimeException("Product description cannot be empty");
+            throw new ProductNotValidException("Product description cannot be empty");
         }
 
         if(product.getPrice()<=0.0) {
-            throw new RuntimeException("Product price cannot be negative");
+            throw new ProductNotValidException("Product price cannot be negative");
         }
 
         if(product.getQuantity()<=0){
-            throw new RuntimeException("Product quantity cannot be zero");
+            throw new ProductNotValidException("Product quantity cannot be zero");
         }
     }
 }

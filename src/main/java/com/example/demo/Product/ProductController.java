@@ -27,6 +27,7 @@ public class ProductController {
     @Autowired private DeleteProductCommandHandler deleteProductCommandHandler;
     @Autowired private ProductRepository productRepository;
 
+
     @GetMapping("/search/{maxPrice}")
     public ResponseEntity<List<Product>> getProductsByPrice(@PathVariable Double maxPrice){
         return ResponseEntity.ok(productRepository.findProductsWithPriceLessThan(maxPrice));

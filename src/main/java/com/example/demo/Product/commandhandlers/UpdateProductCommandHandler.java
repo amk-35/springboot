@@ -6,6 +6,8 @@ import com.example.demo.Product.Model.Product;
 import com.example.demo.Product.Model.UpdateProductCommand;
 import com.example.demo.Product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class UpdateProductCommandHandler implements Command<UpdateProductCommand
     @Autowired
     private CreateProductCommandHandler createProductCommandHandler;
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productCache", key = "#command.getId()"),
+            @CacheEvict(value = "allProductCache", allEntries = true)
+    })
     public ResponseEntity<Product> execute(UpdateProductCommand command) {
         Optional<Product> productOptional = productRepository.findById(command.getId());
         if (productOptional.isEmpty()) {
